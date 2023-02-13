@@ -54,9 +54,9 @@ SetTitleMatchMode, Regex
 ; ^!+e::GoNewErlang()
 ^!f::GoChrome()
 ; +!f::GoFreeplane()
-#If InStr(A_computername, "TN-")
-	^!g::GoGit()
-	^!i::GoIE()
+^!g::GoGit()
+#If InStr(A_computername, "MRO-")
+	^!i::GoIIS()
 #If
 ^!+i::GoSearchInbox()
 #If !InStr(A_computername, "jerkinsp")
@@ -70,27 +70,28 @@ SetTitleMatchMode, Regex
 #If InStr(A_computername, "TN-")
 	^!+m::ToggleMute()
 	!+n::GoOneNote()
-	^!o::GoOutlook()
-	; !+p::PasswordChord()
-	; ^!+p::UsernameAndPasswordChord()
-	^!q::GoSQL()
-	^!+q::GoNewSQL()
-	^!r::RemoveFormatting()
 #If
-^!+r::GoMRemoteNG()
+^!o::GoOutlook()
+; !+p::PasswordChord()
+; ^!+p::UsernameAndPasswordChord()
+^!q::GoSQL()
+^!+q::GoNewSQL()
+^!r::RemoveFormatting()
+;^!+r::GoMRemoteNG()
 ^!s::SearchChord()
+^!t::GoTeams()
 ^!u::GoSublime()
 $^v::PasteToCygwin()
-^!V::GoVS2013()
-!+v::GoGVim()
-^!+v::GoNewGVim()
-^!w::GoWebexTeams()
-!+w::GoWebex()
-^!+w::GoWorkNotes()
-^!x::GoCubicExplorer()
-^!y::GoCygwin()
-^!+y::GoNewCygwin()
-^!z::Test()
+^!V::GoVS2022()
+^+v::GoGVim()
+^!+v::GoNewVS2022()
+;^!w::GoWebexTeams()
+^!w::GoWorkNotes()
+^!+w::GoWebexMeetings()
+;^!x::GoCubicExplorer()
+;^!y::GoCygwin()
+;^!+y::GoNewCygwin()
+;^!z::Test()
 
 ToggleAlwaysOnTop() ; {{{1
 {
@@ -207,7 +208,7 @@ KeywordsChord() ; {{{1
 			salutation := "Thanks!"
 		}
 		StringReplace salutationSafe, salutation, !, {!}
-		Send, {Enter}{Enter}%salutationSafe%{Enter}{Enter}Phil Jerkins{Enter}Phil.Jerkins@eviCore.com{Enter}
+		Send, {Enter}{Enter}%salutationSafe%{Enter}{Enter}Phil Jerkins{Enter}PJerkins@mrocorp.com{Enter}
 		return
 	}
 
@@ -220,7 +221,7 @@ KeywordsChord() ; {{{1
 			salutation := "Thanks!"
 		}
 		StringReplace salutationSafe, salutation, !, {!}
-		Send, {Enter}{Enter}%salutationSafe%{Enter}{Enter}Phil Jerkins{Enter}Phil.Jerkins@eviCore.com{Enter}WebEx:{Space}{Space}https://evicore.webex.com/meet/phil.jerkins{Space}
+		Send, {Enter}{Enter}%salutationSafe%{Enter}{Enter}Phil Jerkins{Enter}PJerkins@mrocorp.com{Enter}WebEx:{Space}{Space}https://mrocorp.webex.com/meet/pjerkins{Space}
 		return
 	}
 
@@ -644,7 +645,7 @@ GoKeePass() ; {{{1
 	IfWinExist KeePa
 		WinActivate
 	else
-		Run C:\Program Files (x86)\KeePass Password Safe 2\KeePass.exe
+		Run C:\Program Files\KeePass Password Safe 2\KeePass.exe
 	return
 }
 
@@ -684,13 +685,27 @@ GoNew7Zip() ; {{{1
 	Run C:\Program Files\7-Zip\7zFM.exe
 }
 
-GoWebex() ; {{{1
+GoWebexMeetings() ; {{{1
 {
-	Process, exist, atmgr.exe
-	if %ErrorLevel% <> 0
-	{
-		WinActivate, ahk_pid %ErrorLevel%
-	}
+	IfWinExist Cisco Webex Meetings
+		WinActivate
+	else
+		MsgBox WebEx Meetings isn't running.
+	return
+	;Process, exist, atmgr.exe
+	;if %ErrorLevel% <> 0
+	;{
+	;	WinActivate, ahk_pid %ErrorLevel%
+	;}
+	;return
+}
+
+GoTeams() ; {{{1
+{
+	IfWinExist Microsoft Teams
+		WinActivate
+	else
+		Run C:\Users\pjerkins\AppData\Local\Microsoft\Teams\current\Teams.exe
 	return
 }
 
@@ -856,8 +871,8 @@ GoGit() ; {{{1
 	Process, exist, SourceTree.exe
 	if %ErrorLevel% = 0
 	{
-		If (InStr(A_computername, "TN-")) {
-			Run C:\Users\PJERKINS\AppData\Local\SourceTree\SourceTree.exe
+		If (InStr(A_computername, "MRO-")) {
+			Run C:\Users\pjerkins\AppData\Local\SourceTree\SourceTree.exe
 		} else {
 			Run C:\Users\Phil\AppData\Local\SourceTree\app-2.6.9\SourceTree.exe
 		}
@@ -934,6 +949,13 @@ GoIE() { ; {{{1
 	return
 }
 
+GoIIS() { ; {{{1
+	IfWinExist Internet Information Services
+		WinActivate
+	else
+		Run , "C:\Program Files\Everything\Everything.exe" -search "InetMgr.exe" 
+	return
+}
 
 
 GoChrome() ; {{{1
@@ -981,19 +1003,32 @@ GoMSDN() { ; {{{1
 
 GoOutlook() ; {{{1
 {
-	IfWinExist .*Outlook
+	IfWinExist PJerkins@mrocorp.com
 		WinActivate
 	else
 		MsgBox Outlook isn't running.
 	return
 }
+; GoOutlook() ; {{{1
+; {
+; 	Process, exist, OUTLOOK.EXE
+; 	if %ErrorLevel% = 0
+; 	{
+; 		Run C:\Program Files\Microsoft Office\root\Office16\OUTLOOK.EXE
+; 	}
+; 	else
+; 	{
+; 		WinActivate, ahk_pid %ErrorLevel%
+; 	}
+; 	return
+; }
 
 GoSQL() ; {{{1
 {
 	IfWinExist Microsoft SQL Server Management Studio
 		WinActivate
 	else
-		Run C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn\ManagementStudio\Ssms.exe
+		Run C:\Program Files (x86)\Microsoft SQL Server Management Studio 19\Common7\IDE\Ssms.exe
 	return
 }
 GoNewSQL() ; {{{1
@@ -1028,6 +1063,18 @@ GoVS2013() { ; {{{1
 	return
 }
 
+GoVS2022() { ; {{{1
+	IfWinExist Microsoft Visual Studio
+		WinActivate
+	else
+		Run , "C:\Program Files\Everything\Everything.exe" -search "DevEnv.exe" 
+	return
+}
+
+GoNewVS2022() { ; {{{1
+	Run , "C:\Program Files\Everything\Everything.exe" -search "DevEnv.exe" 
+}
+
 GoSharpDevelop() { ; {{{1
 	Process, exist, SharpDevelop.exe
 	if %ErrorLevel% = 0
@@ -1054,7 +1101,7 @@ GoGVim() ; {{{1
 	IfWinExist .*GVIM
 		WinActivate
 	else
-		Run C:\Program Files (x86)\Vim\vim82\gvim.exe
+		Run C:\Program Files (x86)\Vim\vim90\gvim.exe
 	return
 }
 GoNewGVim() ; {{{1
