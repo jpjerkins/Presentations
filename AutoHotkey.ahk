@@ -1106,7 +1106,11 @@ GoGVim() ; {{{1
 	IfWinExist .*GVIM
 		WinActivate
 	else
-		Run C:\Program Files (x86)\Vim\vim90\gvim.exe
+		If (InStr(A_computername, "MRO-")) {
+			Run C:\Program Files (x86)\Vim\vim90\gvim.exe
+		} else {
+			Run C:\Program Files (x86)\Vim\vim82\gvim.exe
+		}
 	return
 }
 GoNewGVim() ; {{{1
