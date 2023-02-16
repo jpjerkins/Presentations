@@ -52,7 +52,12 @@ SetTitleMatchMode, Regex
 ^!e::SearchEverything()
 ; ^!e::GoErlang()
 ; ^!+e::GoNewErlang()
-^!f::GoChrome()
+#If InStr(A_computername, "MRO-")
+	^!f::GoChrome()
+#If
+#If InStr(A_computername, "Jerkins-Laptop")
+	^!f::GoFirefox()
+#If
 ; +!f::GoFreeplane()
 ^!g::GoGit()
 #If InStr(A_computername, "MRO-")
@@ -764,10 +769,10 @@ GoVSCode() ; {{{1
 	IfWinExist Visual Studio Code
 		WinActivate
 	Else
-		If (InStr(A_computername, "TN-")) {
-			Run C:\Users\pjerkins\AppData\Local\Programs\Microsoft VS Code\Code.exe
-		} else {
+		If (InStr(A_computername, "MRO-")) {
 			Run C:\Program Files\Microsoft VS Code\Code.exe
+		} else {
+			Run C:\Users\PhilJ\AppData\Local\Programs\Microsoft VS Code\Code.exe
 		}
 	return
 }
@@ -1122,7 +1127,11 @@ GoWorkNotes() ; {{{1
 	Process, exist, nw.exe
 	if %ErrorLevel% = 0
 	{
-		Run C:\Users\pjerkins\Downloads\TiddlyDesktop\nw.exe --user-data-dir="C:\Users\pjerkins\AppData\Local\TiddlyDesktop\User Data" --profile-directory=Default --app-id=bpdeplafbjkfabcdjdbibppeobkefplc
+		if(InStr(A_computername, "MRO-")) {
+			Run C:\Users\pjerkins\Downloads\TiddlyDesktop\nw.exe --user-data-dir="C:\Users\pjerkins\AppData\Local\TiddlyDesktop\User Data" --profile-directory=Default --app-id=bpdeplafbjkfabcdjdbibppeobkefplc
+		} else {
+			Run C:\Users\PhilJ\Downloads\TiddlyDesktop\nw.exe --user-data-dir="C:\Users\PhilJ\AppData\Local\TiddlyDesktop\User Data" --profile-directory=Default --app-id=bpdeplafbjkfabcdjdbibppeobkefplc
+		}
 	}
 	else
 	{
