@@ -879,7 +879,7 @@ GoGit() ; {{{1
 		If (InStr(A_computername, "MRO-")) {
 			Run C:\Users\pjerkins\AppData\Local\SourceTree\SourceTree.exe
 		} else {
-			Run C:\Users\Phil\AppData\Local\SourceTree\app-2.6.9\SourceTree.exe
+			Run C:\Users\PhilJ\AppData\Local\SourceTree\SourceTree.exe
 		}
 	}
 	else
