@@ -650,7 +650,11 @@ GoKeePass() ; {{{1
 	IfWinExist KeePa
 		WinActivate
 	else
-		Run C:\Program Files\KeePass Password Safe 2\KeePass.exe
+		If (InStr(A_computername, "MRO-")) {
+			Run C:\Program Files\KeePass Password Safe 2\KeePass.exe
+		} else {
+			Run C:\Program Files (x86)\KeePass Password Safe 2\KeePass.exe
+		}
 	return
 }
 
