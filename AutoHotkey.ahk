@@ -1,3 +1,4 @@
+iTeamsChatPID := 0
 
 #NoEnv
 #HotkeyModifierTimeout 0
@@ -702,10 +703,29 @@ GoWebexMeetings() ; {{{1
 
 GoTeams() ; {{{1
 {
+	global iTeamsChatPID
 	IfWinExist Microsoft Teams
-		WinActivate
+	{
+		if !iTeamsChatPID
+		{
+			Process, exist, Teams.exe
+			if %ErrorLevel% != 0
+			{
+				iTeamsChatPID = %ErrorLevel%
+			}
+		}
+		WinActivate, ahk_pid %iTeamsChatPID%
+	}
 	else
+	{
 		Run C:\Users\pjerkins\AppData\Local\Microsoft\Teams\current\Teams.exe
+		Process, exist, Teams.exe
+		if %ErrorLevel% != 0
+		{
+			iTeamsChatPID = %ErrorLevel%
+			; MsgBox iTeamsChatPID set to %iTeamsChatPID%
+		}
+	}
 	return
 }
 
