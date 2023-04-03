@@ -1,3 +1,4 @@
+iTeamsChatPID := 0
 
 #NoEnv
 #HotkeyModifierTimeout 0
@@ -52,11 +53,16 @@ SetTitleMatchMode, Regex
 ^!e::SearchEverything()
 ; ^!e::GoErlang()
 ; ^!+e::GoNewErlang()
-^!f::GoChrome()
+#If InStr(A_computername, "MRO-")
+	^!f::GoChrome()
+#If
+#If InStr(A_computername, "Jerkins-Laptop")
+	^!f::GoFirefox()
+#If
 ; +!f::GoFreeplane()
-#If InStr(A_computername, "TN-")
-	^!g::GoGit()
-	^!i::GoIE()
+^!g::GoGit()
+#If InStr(A_computername, "MRO-")
+	^!i::GoIIS()
 #If
 ^!+i::GoSearchInbox()
 #If !InStr(A_computername, "jerkinsp")
@@ -82,9 +88,9 @@ SetTitleMatchMode, Regex
 ^!t::GoTeams()
 ^!u::GoSublime()
 $^v::PasteToCygwin()
-;^!V::GoVS2013()
-^!v::GoGVim()
-^!+v::GoNewGVim()
+^!V::GoVS2022()
+^+v::GoGVim()
+^!+v::GoNewVS2022()
 ;^!w::GoWebexTeams()
 ^!w::GoWorkNotes()
 ^!+w::GoWebexMeetings()
@@ -645,7 +651,11 @@ GoKeePass() ; {{{1
 	IfWinExist KeePa
 		WinActivate
 	else
-		Run C:\Program Files\KeePass Password Safe 2\KeePass.exe
+		If (InStr(A_computername, "MRO-")) {
+			Run C:\Program Files\KeePass Password Safe 2\KeePass.exe
+		} else {
+			Run C:\Program Files (x86)\KeePass Password Safe 2\KeePass.exe
+		}
 	return
 }
 
@@ -702,10 +712,29 @@ GoWebexMeetings() ; {{{1
 
 GoTeams() ; {{{1
 {
+	global iTeamsChatPID
 	IfWinExist Microsoft Teams
-		WinActivate
+	{
+		if !iTeamsChatPID
+		{
+			Process, exist, Teams.exe
+			if %ErrorLevel% != 0
+			{
+				iTeamsChatPID = %ErrorLevel%
+			}
+		}
+		WinActivate, ahk_pid %iTeamsChatPID%
+	}
 	else
+	{
 		Run C:\Users\pjerkins\AppData\Local\Microsoft\Teams\current\Teams.exe
+		Process, exist, Teams.exe
+		if %ErrorLevel% != 0
+		{
+			iTeamsChatPID = %ErrorLevel%
+			; MsgBox iTeamsChatPID set to %iTeamsChatPID%
+		}
+	}
 	return
 }
 
@@ -764,10 +793,10 @@ GoVSCode() ; {{{1
 	IfWinExist Visual Studio Code
 		WinActivate
 	Else
-		If (InStr(A_computername, "TN-")) {
-			Run C:\Users\pjerkins\AppData\Local\Programs\Microsoft VS Code\Code.exe
-		} else {
+		If (InStr(A_computername, "MRO-")) {
 			Run C:\Program Files\Microsoft VS Code\Code.exe
+		} else {
+			Run C:\Users\PhilJ\AppData\Local\Programs\Microsoft VS Code\Code.exe
 		}
 	return
 }
@@ -871,10 +900,10 @@ GoGit() ; {{{1
 	Process, exist, SourceTree.exe
 	if %ErrorLevel% = 0
 	{
-		If (InStr(A_computername, "TN-")) {
-			Run C:\Users\PJERKINS\AppData\Local\SourceTree\SourceTree.exe
+		If (InStr(A_computername, "MRO-")) {
+			Run C:\Users\pjerkins\AppData\Local\SourceTree\SourceTree.exe
 		} else {
-			Run C:\Users\Phil\AppData\Local\SourceTree\app-2.6.9\SourceTree.exe
+			Run C:\Users\PhilJ\AppData\Local\SourceTree\SourceTree.exe
 		}
 	}
 	else
@@ -949,6 +978,13 @@ GoIE() { ; {{{1
 	return
 }
 
+GoIIS() { ; {{{1
+	IfWinExist Internet Information Services
+		WinActivate
+	else
+		Run , "C:\Program Files\Everything\Everything.exe" -search "InetMgr.exe" 
+	return
+}
 
 
 GoChrome() ; {{{1
@@ -1021,7 +1057,7 @@ GoSQL() ; {{{1
 	IfWinExist Microsoft SQL Server Management Studio
 		WinActivate
 	else
-		Run C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn\ManagementStudio\Ssms.exe
+		Run C:\Program Files (x86)\Microsoft SQL Server Management Studio 19\Common7\IDE\Ssms.exe
 	return
 }
 GoNewSQL() ; {{{1
@@ -1056,6 +1092,18 @@ GoVS2013() { ; {{{1
 	return
 }
 
+GoVS2022() { ; {{{1
+	IfWinExist Microsoft Visual Studio
+		WinActivate
+	else
+		Run , "C:\Program Files\Everything\Everything.exe" -search "DevEnv.exe" 
+	return
+}
+
+GoNewVS2022() { ; {{{1
+	Run , "C:\Program Files\Everything\Everything.exe" -search "DevEnv.exe" 
+}
+
 GoSharpDevelop() { ; {{{1
 	Process, exist, SharpDevelop.exe
 	if %ErrorLevel% = 0
@@ -1082,7 +1130,11 @@ GoGVim() ; {{{1
 	IfWinExist .*GVIM
 		WinActivate
 	else
-		Run C:\Program Files (x86)\Vim\vim82\gvim.exe
+		If (InStr(A_computername, "MRO-")) {
+			Run C:\Program Files (x86)\Vim\vim90\gvim.exe
+		} else {
+			Run C:\Program Files (x86)\Vim\vim82\gvim.exe
+		}
 	return
 }
 GoNewGVim() ; {{{1
@@ -1103,7 +1155,11 @@ GoWorkNotes() ; {{{1
 	Process, exist, nw.exe
 	if %ErrorLevel% = 0
 	{
-		Run C:\Users\pjerkins\Downloads\TiddlyDesktop\nw.exe --user-data-dir="C:\Users\pjerkins\AppData\Local\TiddlyDesktop\User Data" --profile-directory=Default --app-id=bpdeplafbjkfabcdjdbibppeobkefplc
+		if(InStr(A_computername, "MRO-")) {
+			Run C:\Users\pjerkins\Downloads\TiddlyDesktop\nw.exe --user-data-dir="C:\Users\pjerkins\AppData\Local\TiddlyDesktop\User Data" --profile-directory=Default --app-id=bpdeplafbjkfabcdjdbibppeobkefplc
+		} else {
+			Run C:\Users\PhilJ\Downloads\TiddlyDesktop\nw.exe --user-data-dir="C:\Users\PhilJ\AppData\Local\TiddlyDesktop\User Data" --profile-directory=Default --app-id=bpdeplafbjkfabcdjdbibppeobkefplc
+		}
 	}
 	else
 	{
