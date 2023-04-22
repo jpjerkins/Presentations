@@ -82,6 +82,7 @@ SetTitleMatchMode, Regex
 ; ^!+p::UsernameAndPasswordChord()
 ^!q::GoSQL()
 ^!+q::GoNewSQL()
+^+q::SqlBitsChord()
 ^!r::RemoveFormatting()
 ;^!+r::GoMRemoteNG()
 ^!s::SearchChord()
