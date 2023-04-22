@@ -69,7 +69,7 @@ SetTitleMatchMode, Regex
 	^!j::GoJiraIssue()
 #If
 ^!k::GoKeePass()
-!+o::GoPostman()
+^+o::GoPostman()
 !+k::KeywordsChord()
 ^!m::MultimonitorChord()
 ^!p::GoCommandPrompt()
