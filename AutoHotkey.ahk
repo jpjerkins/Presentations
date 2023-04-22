@@ -787,7 +787,7 @@ GoVSCode() ; {{{1
 		WinActivate
 	Else
 		If (InStr(A_computername, "MRO-")) {
-			Run C:\Program Files\Microsoft VS Code\Code.exe
+			Run C:\Users\pjerkins\AppData\Local\Programs\Microsoft VS Code\Code.exe
 		} else {
 			Run C:\Users\PhilJ\AppData\Local\Programs\Microsoft VS Code\Code.exe
 		}
