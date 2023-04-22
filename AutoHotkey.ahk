@@ -716,28 +716,17 @@ GoWebexMeetings() ; {{{1
 
 GoTeams() ; {{{1
 {
-	global iTeamsChatPID
-	IfWinExist Microsoft Teams
+	global iTeamsChatWindowID
+	iTeamsChatWindowID := WinExist("\| Microsoft Teams")
+	if(iTeamsChatWindowID)
 	{
-		if !iTeamsChatPID
-		{
-			Process, exist, Teams.exe
-			if %ErrorLevel% != 0
-			{
-				iTeamsChatPID = %ErrorLevel%
-			}
-		}
-		WinActivate, ahk_pid %iTeamsChatPID%
+		WinActivate, ahk_id %iTeamsChatWindowID%
+		; MsgBox iTeamsChatPID set to %iTeamsChatWindowID%
 	}
 	else
 	{
 		Run C:\Users\pjerkins\AppData\Local\Microsoft\Teams\current\Teams.exe
-		Process, exist, Teams.exe
-		if %ErrorLevel% != 0
-		{
-			iTeamsChatPID = %ErrorLevel%
-			; MsgBox iTeamsChatPID set to %iTeamsChatPID%
-		}
+		WinGet, iTeamsChatWindowID, ID
 	}
 	return
 }
