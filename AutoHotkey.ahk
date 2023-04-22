@@ -664,7 +664,11 @@ GoPostman() ; {{{1
 	IfWinExist Postman
 		WinActivate
 	else
-		Run C:\Users\jerkinsp\AppData\Local\Postman\app-6.0.10\Postman.exe
+		If (InStr(A_computername, "MRO-")) {
+			Run C:\Users\pjerkins\AppData\Local\Postman\Postman.exe
+		} else {
+			Run C:\Users\PhilJ\AppData\Local\Postman\Postman.exe
+		}
 	return
 }
 
