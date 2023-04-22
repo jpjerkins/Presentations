@@ -1028,7 +1028,10 @@ GoOutlook() ; {{{1
 	IfWinExist PJerkins@mrocorp.com
 		WinActivate
 	else
-		MsgBox Outlook isn't running.
+		IfWinExist Phil Jerkins - Outlook
+			WinActivate
+		else
+			MsgBox Outlook isn't running.
 	return
 }
 ; GoOutlook() ; {{{1
